@@ -1,0 +1,108 @@
+<meta charset="UTF-8">
+<audio id="sound"></audio><br/>
+<span onclick="generateLevel();">Démarrer</span><br/><br/>
+<span onclick="clic1()">La 2ème note est plus aigue</span><br/>
+<span onclick="clic2()">La 2ème note est identique</span><br/>
+<span onclick="clic3()">La 2ème note est plus grave</span><br/><br/>
+<span id="score"></span>
+<script type="text/javascript">
+
+	var clickedSecondHigher = false;
+	 var clickedSecondSame = false;
+	 var clickedSecondLower = false;
+	 var noteOne = 1;
+	 var noteTwo = 1;
+	 var audioFile1 = "";
+	 var audioFile2 = "";
+
+	function generateLevel() {
+		clickedSecondHigher = false;
+		clickedSecondSame = false;
+		clickedSecondLower = false;
+		//select a random instrument and note for each of both, but different instruments betwwen the 2 instruments
+		var randInstr1 = (Math.floor(Math.random() * 3) + 1);
+		noteOne = Math.floor(Math.random() * (9 - 4 + 1)) + 4;
+		console.log(noteOne)
+		audioFile1 = randInstr1
+		 + "/" 
+		 + noteOne;
+		 var randInstr2 = 1;
+		 while(randInstr2 == randInstr1) {
+		 	randInstr2 = (Math.floor(Math.random() * 3) + 1);
+		 }
+		noteTwo = Math.floor(Math.random() * ((noteOne+2) - (noteOne-2) + 1)) + (noteOne-2);
+		console.log(noteTwo)
+		audioFile2 = randInstr2
+		 + "/" 
+		 + noteTwo;
+
+		 //play one, and so, another
+
+		 var sound = document.getElementById("sound");
+		 sound.src = "Notes/"+audioFile1+".wav";
+		 sound.play();
+		 sound.onended = function() {
+		 	sound.src = "Notes/"+audioFile2+".wav";
+		 	sound.play();
+		 	sound.onended = function() {
+		 		sound.pause()
+		 	}
+		 }
+	}
+
+	 //tell if the second was higher, the same or lower ?
+
+	 function clic1 () {
+		clickedSecondHigher = true
+		check()
+	 }
+	 function clic2 () {
+	 	clickedSecondSame = true
+	 	check()
+	 }
+	 function clic3 () {
+	 	clickedSecondLower = true
+	 	check()
+	 }
+
+	 function check() {
+	 	var score = document.getElementById("score")
+	 	if(noteTwo > noteOne && clickedSecondHigher) {
+		 	//gagne
+		 	score.innerHTML = "Gagné !"
+		 	generateLevel();
+		 } else if (noteTwo < noteOne && clickedSecondLower) {
+			//gagne
+			score.innerHTML = "Gagné !"
+			generateLevel();
+		 } else if (noteTwo == noteOne && clickedSecondSame) {
+			//gagne
+			score.innerHTML = "Gagné !"
+			generateLevel();
+		 } else {
+		 	//perdu
+		 	var sound = document.getElementById("sound");
+		 	score.innerHTML = "Perdu ! ressayez !"
+		 	sound.src = "Notes/"+audioFile1+".wav";
+			 sound.play();
+			 sound.onended = function() {
+			 	sound.src = "Notes/"+audioFile2+".wav";
+			 	sound.play();
+			 	sound.onended = function() {
+			 		sound.pause()
+			 	}
+			 }
+		 }
+		 
+	 }
+	 
+
+</script>
+
+<!--
+1: Electric Piano
+2: 80s Piano
+3: Guitar
++ slash +
+1 = DO, 2 = DO# 3 = RE .... 12 = SI
+-->
